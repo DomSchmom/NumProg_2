@@ -91,7 +91,24 @@ public class LinearInterpolation implements InterpolationMethod {
     @Override
     public double evaluate(double z) {
         /* TODO: diese Methode ist zu implementieren */
-        return 0.0;
+        if(z <= x[0]){
+            return y[0];
+        }
+        else if(z >= x[x.length-1]){
+            return y[x.length-1];
+        }
+        //Gerade wird gebildet und z eingesetzt
+        int i = findNextLowerXIndex(z);
+        return (z - x[i]) * (y[i + 1] - y[i]) / (x[i+1] - x[i]) + y[i];
+    }
+
+    private int findNextLowerXIndex(double z){
+        for (int i = x.length - 1; i >= 0; i--) {
+            if(z > x[i]){
+                return i;
+            }
+        }
+        return -1;
     }
 
 }

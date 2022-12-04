@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.List;
+
 import dft.DFT;
 import dft.IFFT;
 import dft.Complex;
@@ -9,9 +11,21 @@ public class Test {
      * @param args
      */
     public static void main(String[] args) {
-        testNewton();
-        testSplines();
-        testFFT();
+        testLinear();
+        //testNewton();
+        //testSplines();
+        //testFFT();
+    }
+
+    private static void testLinear() {
+
+        double[] x = { -1, 1, 3 };
+        double[] y = { -3, 1, -3 };
+        LinearInterpolation l = new LinearInterpolation();
+        l.init(x,y);
+
+        System.out.println("Ergebnis:" + l.evaluate(0.5));
+        System.out.println("-------------------------------");
     }
 
     private static void testNewton() {
