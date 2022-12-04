@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.stream.DoubleStream;
 
 /**
  * Die Klasse Newton-Polynom beschreibt die Newton-Interpolation. Die Klasse
@@ -87,6 +88,18 @@ public class NewtonPolynom implements InterpolationMethod {
      */
     private void computeCoefficients(double[] y) {
         /* TODO: diese Methode ist zu implementieren */
+        a = new double[x.length];
+        f = new double[x.length];
+        a[0] = y[0];
+        for (int k = 1; k < x.length; k++) {
+            for (int i = 0; i < x.length - k; i++) {
+                y[i] = (y[i+1] - y[i]) / (x[i+k] - x[i]);
+                if(i == 0){
+                    a[k] = y[i];
+                }
+            }
+        }
+        f = y;
     }
 
     /**
@@ -121,6 +134,18 @@ public class NewtonPolynom implements InterpolationMethod {
      */
     public void addSamplingPoint(double x_new, double y_new) {
         /* TODO: diese Methode ist zu implementieren */
+        if(DoubleStream.of(x).anyMatch(x -> x == x_new)){
+            return;
+        }
+        x = Arrays.copyOf(x, x.length + 1);
+        f = Arrays.copyOf(f, f.length + 1);
+        a = Arrays.copyOf(a, a.length + 1);
+        x[x.length-1] = x_new;
+        f[f.length-1] = y_new;
+        for (int i = f.length - 2; i >= 0; i--) {
+            f[i] = (f[i+1] - f[i]) / (x_new - x[i]);
+        }
+        a[a.length-1] = f[0];
     }
 
     /**
@@ -131,6 +156,11 @@ public class NewtonPolynom implements InterpolationMethod {
     @Override
     public double evaluate(double z) {
         /* TODO: diese Methode ist zu implementieren */
-        return 0.0;
+        double result = a[a.length - 1];
+        for (int i = a.length - 2; i >= 0; i--) {
+            result *= z - x[i];
+            result += a[i];
+        }
+        return result;
     }
 }

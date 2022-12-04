@@ -11,8 +11,8 @@ public class Test {
      * @param args
      */
     public static void main(String[] args) {
-        testLinear();
-        //testNewton();
+        //testLinear();
+        testNewton();
         //testSplines();
         //testFFT();
     }
@@ -24,7 +24,7 @@ public class Test {
         LinearInterpolation l = new LinearInterpolation();
         l.init(x,y);
 
-        System.out.println("Ergebnis:" + l.evaluate(0.5));
+        System.out.println("Ergebnis Linear: " + l.evaluate(0.5));
         System.out.println("-------------------------------");
     }
 
@@ -34,7 +34,7 @@ public class Test {
         double[] y = { -3, 1, -3 };
         NewtonPolynom p = new NewtonPolynom(x, y);
 
-        System.out.println(p.evaluate(0) + " sollte sein: 0.0");
+        System.out.println("Ergebnis Newton: " + p.evaluate(1));
         System.out.println("-------------------------------");
     }
 
