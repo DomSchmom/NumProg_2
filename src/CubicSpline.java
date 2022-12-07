@@ -83,7 +83,49 @@ public class CubicSpline implements InterpolationMethod {
      */
     public void computeDerivatives() {
         /* TODO: diese Methode ist zu implementieren */
+        if(n == 2){
+
+        }
+        double[] cPrime = new double[n-2];
+        double[] dPrime = new double[n-1];
+
+        h = (b - a) / n;
+        double[] yNew = new double[y.length - 2];
+        for (int i = 3; i < y.length; i++) {
+            yNew[i-2] = (y[i] + y[i-2]) * 3/h;
+        }
+        yNew[0] = (y[2] - y[0] - yprime[0] * h/3) * 3/h;
+        yNew[yNew.length - 1] = (y[y.length-1] - y[y.length-3] - yprime[n] * h/3) * 3/h;
+
+        //Loop for cPrime
+        for (int i = 1; i < n; i++) {
+            cPrime[i-1] = calculateC(i);
+        }
+        //Loop for dPrime
+        for (int i = 1; i < n + 1; i++) {
+            dPrime[i-1] = calculateD(i, yNew);
+        }
+        yprime[yprime.length-2] = dPrime[dPrime.length-1];
+        for (int i = yprime.length - 3; i > 0; i++) {
+            yprime[i] = dPrime[i] - cPrime[i] * yprime[i+1];
+        }
+
     }
+
+    private double calculateC(int i){
+        if(i <= 1){
+            return 0.25;
+        }
+        return 1 / (4 - calculateC(i-1));
+    }
+
+    private double calculateD(int i, double[] yNew){
+        if(i <= 1){
+            return yNew[0]/4;
+        }
+        return (yNew[i-1] - calculateD(i-1, yNew)) / (4 - calculateC(i-1));
+    }
+
 
     /**
      * {@inheritDoc} Liegt z ausserhalb der Stuetzgrenzen, werden die
