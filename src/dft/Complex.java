@@ -31,7 +31,11 @@ public class Complex {
      */
     public Complex add(Complex other) {
         // TODO: diese Methode ist zu implementieren
-        return null;
+        double realResult;
+        double imaginaryResult;
+        realResult = this.real + other.real;
+        imaginaryResult = this.imaginary + other.imaginary;
+        return new Complex(realResult, imaginaryResult);
     }
 
     /**
@@ -41,7 +45,11 @@ public class Complex {
      */
     public Complex sub(Complex other) {
         // TODO: diese Methode ist zu implementieren
-        return null;
+        double realResult;
+        double imaginaryResult;
+        realResult = this.real - other.real;
+        imaginaryResult = this.imaginary - other.imaginary;
+        return new Complex(realResult, imaginaryResult);
     }
 
     /**
@@ -51,7 +59,11 @@ public class Complex {
      */
     public Complex mul(Complex other) {
         // TODO: diese Methode ist zu implementieren
-        return null;
+        double realResult;
+        double imaginaryResult;
+        realResult = this.real * other.real - this.imaginary * other.imaginary;
+        imaginaryResult = this.real * other.imaginary + this.imaginary * other.real;
+        return new Complex(realResult, imaginaryResult);
     }
 
     /**
@@ -124,6 +136,10 @@ public class Complex {
      */
     public static Complex fromPolar(double r, double phi) {
         // TODO: diese Methode ist zu implementieren
-        return null;
+        double realResult;
+        double imaginaryResult;
+        realResult = r * Math.cos(phi);
+        imaginaryResult = r * Math.sin(phi);
+        return new Complex(realResult, imaginaryResult);
     }
 }
