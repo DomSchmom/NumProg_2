@@ -97,6 +97,7 @@ public class CubicSpline implements InterpolationMethod {
         yNew[0] = (y[2] - y[0] - yprime[0] * h/3) * 3/h;
         yNew[yNew.length - 1] = (y[y.length-1] - y[y.length-3] - yprime[n] * h/3) * 3/h;
 
+        /*
         //Loop for cPrime
         for (int i = 1; i < n; i++) {
             cPrime[i-1] = calculateC(i);
@@ -109,7 +110,19 @@ public class CubicSpline implements InterpolationMethod {
         for (int i = yprime.length - 3; i > 0; i++) {
             yprime[i] = dPrime[i] - cPrime[i] * yprime[i+1];
         }
+         */
+        double lower[] = new double[yNew.length-1];
+        double diag[] = new double[yNew.length];
+        double upper[] = new double[yNew.length-1];
+        Arrays.fill(lower, 1.0);
+        Arrays.fill(diag, 4.0);
+        Arrays.fill(upper, 1.0);
+        TridiagonalMatrix tri = new TridiagonalMatrix(lower, diag, upper);
 
+        double[] solved = tri.solveLinearSystem(yNew);
+        for(int i = 0; i < solved.length; i++) {
+            yprime[i+1] = solved[i];
+        }
     }
 
     private double calculateC(int i){
@@ -136,6 +149,33 @@ public class CubicSpline implements InterpolationMethod {
     @Override
     public double evaluate(double z) {
         /* TODO: diese Methode ist zu implementieren */
-        return 0.0;
+        if(z < a)
+            return a;
+        if(z > b)
+            return b;
+        int i = (int) Math.floor((z-a) / h);
+        double t = (z - i) / h;
+        double q = y[i] * h0(t) + y[i+1] * h1(t) + h * yprime[i] * h2(t) + h * yprime[i+1] * h3(t);
+        return q;
+    }
+
+    private double h0(double t) {
+        return (1 - 3 * t * t + 2 * t * t * t);
+    }
+
+    private double h1(double t) {
+        return (3 * t * t - 2 * t * t * t);
+    }
+
+    private double h2(double t) {
+        return (t - 2 * t * t + t * t * t);
+    }
+
+    private double h3(double t) {
+        return (-1 * t * t + t * t * t);
+    }
+
+    private double getXi(int i) {
+        return a + i * h;
     }
 }
