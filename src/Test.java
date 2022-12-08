@@ -40,9 +40,9 @@ public class Test {
 
     public static void testSplines() {
         CubicSpline spl = new CubicSpline();
-        double[] y = { 2, 0, 2, 3 };
-        spl.init(-1, 2, 3, y);
-        spl.setBoundaryConditions(9, 0);
+        double[] y = { 1, -1, 1.0/3.0, 7, 5};
+        spl.init(-1, 7, 4, y);
+        spl.setBoundaryConditions(0, 0);
         System.out.println(Arrays.toString(spl.getDerivatives())
                 + " sollte sein: [9.0, -3.0, 3.0, 0.0].");
     }
