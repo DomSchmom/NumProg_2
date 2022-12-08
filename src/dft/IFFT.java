@@ -26,8 +26,17 @@ public class IFFT {
         }
         else{
             int m = n/2;
-            Complex[] z1 = ifftRec(Arrays.copyOf(c, c.length-1), n/2);
-            Complex[] z2 = ifftRec(Arrays.copyOfRange(c, 1, c.length), n/2);
+            Complex[] z1Array = new Complex[n/2];
+            Complex[] z2Array = new Complex[n/2];
+            for(int i = 0; i < n; i+=2) {
+                z1Array[i/2] = c[i];
+            }
+            for(int i = 1; i < n; i+=2) {
+                z2Array[i/2] = c[i];
+            }
+
+            Complex[] z1 = ifftRec(z1Array, n/2);
+            Complex[] z2 = ifftRec(z2Array, n/2);
             Complex omega = new Complex(Math.cos(2*Math.PI/n), Math.sin(2*Math.PI/n));
             for (int j = 0; j < m; j++) {
                 v[j] = z1[j].add(omega.power(j).mul(z2[j]));

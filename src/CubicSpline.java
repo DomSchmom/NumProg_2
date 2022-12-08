@@ -83,17 +83,27 @@ public class CubicSpline implements InterpolationMethod {
      */
     public void computeDerivatives() {
         /* TODO: diese Methode ist zu implementieren */
-        if(n == 2){
-
+        if(n == 1) {
+            return;
+        }
+        else if(n == 2){
+            //4 * y1' = 3/h * (y2 - y0 - h/3 * y0'
+            // --> y1' = (3/h * (y2 - y0 - h/3 * y0') / 4
+            yprime[1] = (3/h * (y[2] - y[0] - h/3 * (yprime[0] + yprime[n]))) / 4; //OMEGA SUS, WIR PASSEN SO DIE TESTS FÜR N==2, ABER ICH WEIß NICHT, WARUM, DAS yprime[0] + yprime[n] IST SUS AF
+            return;
+        } else if(n == 3) {
+            // | 4 1 | * | y1' | = 3/h * | y2 - y0 - h/3 * y0'
+            // | 1 4 |   | y2' |         | y3 - y1 - h/3 * yn'
         }
 
         h = (b - a) / n;
-        double[] yNew = new double[y.length - 2];
-        for (int i = 3; i < y.length; i++) {
-            yNew[i-2] = (y[i] + y[i-2]) * 3/h;
+        double[] yNew = new double[n-1];
+
+        for(int i = 3; i < n; i++) { //wir hatten davor i < y.length, nicht i < n = y.length-1, gefixt!
+            yNew[i-2] = (y[i] - y[i-2]) * 3/h;
         }
-        yNew[0] = (y[2] - y[0] - yprime[0] * h/3) * 3/h;
-        yNew[yNew.length - 1] = (y[y.length-1] - y[y.length-3] - yprime[n] * h/3) * 3/h;
+        yNew[0] = (y[2] - y[0] - h/3 * yprime[0]) * 3/h;
+        yNew[yNew.length-1] = (y[n] - y[n-2] - h/3 * yprime[n]) * 3/h;
 
         double lower[] = new double[yNew.length-1];
         double diag[] = new double[yNew.length];
@@ -119,9 +129,9 @@ public class CubicSpline implements InterpolationMethod {
     public double evaluate(double z) {
         /* TODO: diese Methode ist zu implementieren */
         if(z < a)
-            return a;
+            return y[0];
         if(z > b)
-            return b;
+            return y[n];
         int i = (int) ((z-a) / h);
         double t = (z - getXi(i)) / h;
         double q = y[i] * h0(t) + y[i+1] * h1(t) + h * yprime[i] * h2(t) + h * yprime[i+1] * h3(t);

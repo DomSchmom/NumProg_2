@@ -13,8 +13,8 @@ public class Test {
     public static void main(String[] args) {
         //testLinear();
         //testNewton();
-        testSplines();
-        //testFFT();
+        //testSplines();
+        testFFT();
     }
 
     private static void testLinear() {
@@ -40,11 +40,11 @@ public class Test {
 
     public static void testSplines() {
         CubicSpline spl = new CubicSpline();
-        double[] y = { 1, -1, 1.0/3.0, 7, 5};
-        spl.init(-1, 7, 4, y);
-        spl.setBoundaryConditions(0, 0);
-        System.out.println(Arrays.toString(spl.getDerivatives())
-                + " sollte sein: [9.0, -3.0, 3.0, 0.0].");
+        double[] y = {1.0, 0.5};
+        spl.init(-1, 2, 1, y);
+        spl.setBoundaryConditions(0.5, 2.0);
+        System.out.println(spl.evaluate(-2.0)
+                + " sollte sein: 1.0.");
     }
 
     public static void testFFT() {
