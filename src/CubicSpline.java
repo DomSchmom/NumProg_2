@@ -86,8 +86,6 @@ public class CubicSpline implements InterpolationMethod {
         if(n == 2){
 
         }
-        double[] cPrime = new double[n-2];
-        double[] dPrime = new double[n-1];
 
         h = (b - a) / n;
         double[] yNew = new double[y.length - 2];
@@ -97,20 +95,6 @@ public class CubicSpline implements InterpolationMethod {
         yNew[0] = (y[2] - y[0] - yprime[0] * h/3) * 3/h;
         yNew[yNew.length - 1] = (y[y.length-1] - y[y.length-3] - yprime[n] * h/3) * 3/h;
 
-        /*
-        //Loop for cPrime
-        for (int i = 1; i < n; i++) {
-            cPrime[i-1] = calculateC(i);
-        }
-        //Loop for dPrime
-        for (int i = 1; i < n + 1; i++) {
-            dPrime[i-1] = calculateD(i, yNew);
-        }
-        yprime[yprime.length-2] = dPrime[dPrime.length-1];
-        for (int i = yprime.length - 3; i > 0; i++) {
-            yprime[i] = dPrime[i] - cPrime[i] * yprime[i+1];
-        }
-         */
         double lower[] = new double[yNew.length-1];
         double diag[] = new double[yNew.length];
         double upper[] = new double[yNew.length-1];
@@ -125,21 +109,6 @@ public class CubicSpline implements InterpolationMethod {
         }
     }
 
-    private double calculateC(int i){
-        if(i <= 1){
-            return 0.25;
-        }
-        return 1 / (4 - calculateC(i-1));
-    }
-
-    private double calculateD(int i, double[] yNew){
-        if(i <= 1){
-            return yNew[0]/4;
-        }
-        return (yNew[i-1] - calculateD(i-1, yNew)) / (4 - calculateC(i-1));
-    }
-
-
     /**
      * {@inheritDoc} Liegt z ausserhalb der Stuetzgrenzen, werden die
      * aeussersten Werte y[0] bzw. y[n] zurueckgegeben. Liegt z zwischen den
@@ -153,8 +122,8 @@ public class CubicSpline implements InterpolationMethod {
             return a;
         if(z > b)
             return b;
-        int i = (int) Math.floor((z-a) / h);
-        double t = (z - i) / h;
+        int i = (int) ((z-a) / h);
+        double t = (z - getXi(i)) / h;
         double q = y[i] * h0(t) + y[i+1] * h1(t) + h * yprime[i] * h2(t) + h * yprime[i+1] * h3(t);
         return q;
     }
@@ -176,6 +145,6 @@ public class CubicSpline implements InterpolationMethod {
     }
 
     private double getXi(int i) {
-        return a + i * h;
+        return a + h * i;
     }
 }
