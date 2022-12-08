@@ -28,11 +28,11 @@ public class IFFT {
             int m = n/2;
             Complex[] z1Array = new Complex[n/2];
             Complex[] z2Array = new Complex[n/2];
-            for(int i = 0; i < n; i+=2) {
-                z1Array[i/2] = c[i];
-            }
-            for(int i = 1; i < n; i+=2) {
-                z2Array[i/2] = c[i];
+            for(int i = 0; i < n; i++) {
+                if(i % 2 == 0)
+                    z1Array[i/2] = c[i];
+                else
+                    z2Array[i/2] = c[i];
             }
 
             Complex[] z1 = ifftRec(z1Array, n/2);
